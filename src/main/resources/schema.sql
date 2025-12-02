@@ -1,8 +1,15 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
+    CREATE TYPE user_role AS ENUM ('ADMIN', 'ANALYST');
+  END IF;
+END$$;
+
 CREATE TABLE IF NOT EXISTS utilisateur (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  role TEXT,
+  role user_role,
   username VARCHAR(255),
   password VARCHAR(255)
 );
