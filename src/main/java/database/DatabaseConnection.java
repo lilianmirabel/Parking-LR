@@ -3,8 +3,6 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.h2.security.SHA256;
-
 public class DatabaseConnection {
 
     // --- Configurations de la Base de Données ---
