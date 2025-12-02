@@ -3,10 +3,7 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-<<<<<<< HEAD
-=======
 
->>>>>>> f65d2457cea29ce2a81079e57212e40f17f83ed8
 public class DatabaseConnection {
 
     // --- Configurations de la Base de Données ---
