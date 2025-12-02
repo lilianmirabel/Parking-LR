@@ -3,14 +3,13 @@ package database;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import org.h2.security.SHA256;
 
 public class DatabaseConnection {
 
     // --- Configurations de la Base de Données ---
-    private static final String DB_URL = "jdbc:postgresql://postgres:5432/parkinglr";
-    private static final String USER = "postgres_user";
-    private static final String PASSWORD = "postgres_pass";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/nom_de_votre_base";
+    private static final String USER = "votre_utilisateur";
+    private static final String PASSWORD = "votre_mot_de_passe";
 
     /**
      * Établit et retourne une connexion à la base de données PostgreSQL.
@@ -35,7 +34,7 @@ public class DatabaseConnection {
             System.err.println("Échec de la connexion à la base de données!");
             System.err.println("SQLState: " + e.getSQLState());
             System.err.println("Erreur: " + e.getMessage());
-
+            // Pour le débogage: e.printStackTrace();
         }
 
         return connection;
