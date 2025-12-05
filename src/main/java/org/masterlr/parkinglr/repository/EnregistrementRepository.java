@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface EnregistrementRepository extends JpaRepository<Enregistrement, UUID> {
     List<Enregistrement> findByParkingId(UUID parkingId);
+    void deleteByParkingId(UUID parkingId);
 }

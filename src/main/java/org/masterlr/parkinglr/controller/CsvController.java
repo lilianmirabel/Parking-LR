@@ -7,6 +7,7 @@ import org.masterlr.parkinglr.repository.ParkingRepository;
 import org.masterlr.parkinglr.service.CsvParserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +47,7 @@ public class CsvController {
      * Upload and parse a CSV file
      */
     @PostMapping("/upload-csv")
+    @Transactional
     public ResponseEntity<?> uploadCsv(@RequestParam("file") MultipartFile file) {
         Map<String, Object> response = new HashMap<>();
 
@@ -102,6 +104,8 @@ public class CsvController {
                     existing.setNb2rEl(parsedParking.getNb2rEl());
                     existing.setNbAutopartage(parsedParking.getNbAutopartage());
                     existing.setNb2Rm(parsedParking.getNb2Rm());
+                    // Delete old enregistrements before adding new ones
+                    enregistrementRepository.deleteByParkingId(existing.getId());
                     savedParkings.add(parkingRepository.save(existing));
                     parkingsUpdated++;
                 } else {
