@@ -13,7 +13,7 @@ CREATE TABLE utilisateur (
 
 CREATE TABLE IF NOT EXISTS parking (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  nom VARCHAR(255),
+  nom VARCHAR(255) UNIQUE,
   ylat FLOAT,
   xlong FLOAT,
   coord_x FLOAT,
