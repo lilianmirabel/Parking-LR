@@ -62,7 +62,7 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - NEXT_PUBLIC_API_URL=http://localhost:8080/api
     command: sh -c "npm install && npm run dev"
     restart: unless-stopped
 

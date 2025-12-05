@@ -1,11 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useParkings } from "@/app/hooks/useParkings";
+import { useState, useEffect } from "react";
+import { historiqueService } from "@/app/services/historiqueService";
 import DashboardKPIs from "@/app/components/dashboard/DashboardKPIs";
+import { Parking } from "@/app/types/parking";
 
 export default function DashboardPage() {
-  const { parkings, isLoading, error } = useParkings();
+  const [parkings, setParkings] = useState<Parking[]>([]);
+  const [datesDisponibles, setDatesDisponibles] = useState<string[]>([]);
+  const [dateSelectionnee, setDateSelectionnee] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadDatesDisponibles();
+    loadParkings();
+  }, []);
+
+  const loadDatesDisponibles = async () => {
+    try {
+      const dates = await historiqueService.getDatesDisponibles();
+      setDatesDisponibles(dates);
+    } catch (err) {
+      console.error("Erreur chargement dates:", err);
+    }
+  };
+
+  const loadParkings = async (date?: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await historiqueService.getParkingsParDate(date);
+      setParkings(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur de chargement");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDateChange = (date: string) => {
+    setDateSelectionnee(date);
+    loadParkings(date || undefined);
+  };
 
   if (isLoading) {
     return (
@@ -34,7 +72,7 @@ export default function DashboardPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center justify-between mb-4">
             <Link
               href="/"
               className="flex items-center gap-2 text-slate-600 hover:text-blue-600 transition-colors"
@@ -54,12 +92,45 @@ export default function DashboardPage() {
               </svg>
               Retour
             </Link>
+
+            {/* Sélecteur de date */}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-slate-700">
+                Analyser les données du :
+              </label>
+              <select
+                value={dateSelectionnee}
+                onChange={(e) => handleDateChange(e.target.value)}
+                className="px-4 py-2 border border-slate-300 rounded-xl bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Données actuelles</option>
+                {datesDisponibles.map((date) => (
+                  <option key={date} value={date}>
+                    {new Date(date).toLocaleDateString("fr-FR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
+
           <h1 className="text-4xl font-bold text-slate-800 mb-2">
             📊 Dashboard Analytique
           </h1>
           <p className="text-slate-600">
-            Visualisation des données et statistiques des parkings
+            {dateSelectionnee
+              ? `Données du ${new Date(dateSelectionnee).toLocaleDateString(
+                  "fr-FR",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )}`
+              : "Visualisation des données actuelles et statistiques des parkings"}
           </p>
         </div>
 
