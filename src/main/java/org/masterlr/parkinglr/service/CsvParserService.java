@@ -37,7 +37,6 @@ public class CsvParserService {
      */
     public static class EnregistrementData {
         public LocalDateTime dateComptage;
-        public int nbPlaces;
         public int nbPlacesDisponibles;
         public int nbPrDispo;
         public int nbPmrDispo;
@@ -132,7 +131,6 @@ public class CsvParserService {
         Enregistrement e = new Enregistrement();
         e.setParkingId(parkingId);
         e.setDateComptage(data.dateComptage);
-        e.setNbPlaces(data.nbPlaces);
         e.setNbPlacesDisponibles(data.nbPlacesDisponibles);
         e.setNbPrDispo(data.nbPrDispo);
         e.setNbPmrDispo(data.nbPmrDispo);

@@ -1,12 +1,27 @@
+"use client";
+
+import { useRef } from "react";
 import CsvFileSelector from "./components/csv/CsvFileSelector";
-import ParkingList from "./components/parking/ParkingList";
+import ParkingList, { ParkingListRef } from "./components/parking/ParkingList";
+import { useRole, Role } from "./contexts/RoleContext";
 
 export default function Home() {
+  const parkingListRef = useRef<ParkingListRef>(null);
+  const { role, setRole, isAdmin } = useRole();
+
+  const handleUploadSuccess = () => {
+    parkingListRef.current?.refresh();
+  };
+
+  const handleRoleChange = (newRole: Role) => {
+    setRole(newRole);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 to-blue-500">
-        <div className="max-w-6xl mx-auto px-6 py-8">
+        <div className="max-w-6xl mx-auto px-6 py-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/20 rounded-xl">
               <svg
@@ -32,45 +47,91 @@ export default function Home() {
               </p>
             </div>
           </div>
+          <div className="flex items-center gap-4">
+            {/* Role Selector */}
+            <div className="flex items-center gap-2 bg-white/10 rounded-xl p-1">
+              <button
+                onClick={() => handleRoleChange("admin")}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  role === "admin"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                Admin
+              </button>
+              <button
+                onClick={() => handleRoleChange("analyst")}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  role === "analyst"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                Analyste
+              </button>
+            </div>
+            <a
+              href="/dashboard"
+              className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-white font-medium transition-colors"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+              Tableau de bord
+            </a>
+          </div>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8">
-        {/* Import Section */}
-        <section className="mb-12">
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="p-1.5 bg-blue-100 rounded-lg">
-                <svg
-                  className="w-5 h-5 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                  />
-                </svg>
+        {/* Import Section - Admin only */}
+        {isAdmin && (
+          <section className="mb-12">
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="p-1.5 bg-blue-100 rounded-lg">
+                  <svg
+                    className="w-5 h-5 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                    />
+                  </svg>
+                </div>
+                <h2 className="text-lg font-semibold text-slate-800">
+                  Import de donnees
+                </h2>
               </div>
-              <h2 className="text-lg font-semibold text-slate-800">
-                Import de donnees
-              </h2>
+              <p className="text-sm text-slate-600 mb-6">
+                Importez un fichier CSV pour ajouter ou mettre a jour les donnees des parkings
+              </p>
+              <div className="flex justify-center">
+                <CsvFileSelector onUploadSuccess={handleUploadSuccess} />
+              </div>
             </div>
-            <p className="text-sm text-slate-600 mb-6">
-              Importez un fichier CSV pour ajouter ou mettre a jour les donnees des parkings
-            </p>
-            <div className="flex justify-center">
-              <CsvFileSelector />
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Parking List Section */}
         <section>
-          <ParkingList />
+          <ParkingList ref={parkingListRef} />
         </section>
       </main>
 

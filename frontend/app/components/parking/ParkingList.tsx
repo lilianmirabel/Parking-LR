@@ -9,7 +9,7 @@ export interface ParkingListRef {
 }
 
 const ParkingList = forwardRef<ParkingListRef>(function ParkingList(_, ref) {
-  const { parkings, isLoading, isError, isEmpty, error, refresh } = useParkings();
+  const { parkings, isLoading, isError, isEmpty, error, refresh, isLive, setLive, lastUpdated } = useParkings();
 
   useImperativeHandle(ref, () => ({
     refresh,
@@ -93,8 +93,39 @@ const ParkingList = forwardRef<ParkingListRef>(function ParkingList(_, ref) {
         </div>
         <p className="text-slate-700 font-medium mb-2">Aucun parking trouve</p>
         <p className="text-sm text-slate-500">
-          Importez un fichier CSV pour ajouter des parkings
+          {isLive
+            ? "Aucune donnee en direct disponible"
+            : "Importez un fichier CSV pour ajouter des parkings"}
         </p>
+        {/* Toggle buttons even when empty */}
+        <div className="flex items-center gap-2 mt-6 p-1 bg-slate-100 rounded-lg">
+          <button
+            onClick={() => setLive(false)}
+            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+              !isLive
+                ? "bg-white text-slate-700 shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            Base de donnees
+          </button>
+          <button
+            onClick={() => setLive(true)}
+            className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+              isLive
+                ? "bg-green-500 text-white shadow-sm"
+                : "text-slate-500 hover:text-slate-700"
+            }`}
+          >
+            Live
+            {isLive && (
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+            )}
+          </button>
+        </div>
       </div>
     );
   }
@@ -124,29 +155,66 @@ const ParkingList = forwardRef<ParkingListRef>(function ParkingList(_, ref) {
             </h2>
             <p className="text-sm text-slate-500">
               {parkings.length} parking{parkings.length > 1 ? "s" : ""} disponible{parkings.length > 1 ? "s" : ""}
+              {isLive && lastUpdated && (
+                <span className="ml-2 text-green-600">
+                  - Mis a jour a {lastUpdated.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}
+                </span>
+              )}
             </p>
           </div>
         </div>
-        <button
-          onClick={refresh}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors rounded-lg hover:bg-white"
-          title="Rafraichir la liste"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="flex items-center gap-3">
+          {/* Live/Database Toggle */}
+          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg">
+            <button
+              onClick={() => setLive(false)}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                !isLive
+                  ? "bg-white text-slate-700 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Base de donnees
+            </button>
+            <button
+              onClick={() => setLive(true)}
+              className={`flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
+                isLive
+                  ? "bg-green-500 text-white shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Live
+              {isLive && (
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                </span>
+              )}
+            </button>
+          </div>
+          {/* Refresh Button */}
+          <button
+            onClick={refresh}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors rounded-lg hover:bg-white"
+            title="Rafraichir la liste"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-            />
-          </svg>
-          Rafraichir
-        </button>
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Rafraichir
+          </button>
+        </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {parkings.map((parking) => (
