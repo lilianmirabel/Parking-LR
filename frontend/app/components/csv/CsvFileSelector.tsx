@@ -5,7 +5,11 @@ import { useCsvUpload } from "@/app/hooks/useCsvUpload";
 import CsvFileInfo from "./CsvFileInfo";
 import CsvUploadButton from "./CsvUploadButton";
 
-export default function CsvFileSelector() {
+interface CsvFileSelectorProps {
+  onUploadSuccess?: () => void;
+}
+
+export default function CsvFileSelector({ onUploadSuccess }: CsvFileSelectorProps) {
   const [isDragging, setIsDragging] = useState(false);
   const inputId = "csv-file-input";
 
@@ -51,6 +55,13 @@ export default function CsvFileSelector() {
     reset();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  const handleUpload = async () => {
+    const result = await upload();
+    if (result && onUploadSuccess) {
+      onUploadSuccess();
     }
   };
 
@@ -158,7 +169,7 @@ export default function CsvFileSelector() {
         <CsvUploadButton
           status={status}
           hasFile={hasFile}
-          onUpload={upload}
+          onUpload={handleUpload}
           onReset={handleRemove}
         />
       </div>

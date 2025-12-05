@@ -1,10 +1,19 @@
 "use client";
 
+import { useImperativeHandle, forwardRef } from "react";
 import { useParkings } from "@/app/hooks/useParkings";
 import ParkingCard from "./ParkingCard";
 
-export default function ParkingList() {
+export interface ParkingListRef {
+  refresh: () => void;
+}
+
+const ParkingList = forwardRef<ParkingListRef>(function ParkingList(_, ref) {
   const { parkings, isLoading, isError, isEmpty, error, refresh } = useParkings();
+
+  useImperativeHandle(ref, () => ({
+    refresh,
+  }));
 
   if (isLoading) {
     return (
@@ -146,4 +155,6 @@ export default function ParkingList() {
       </div>
     </div>
   );
-}
+});
+
+export default ParkingList;

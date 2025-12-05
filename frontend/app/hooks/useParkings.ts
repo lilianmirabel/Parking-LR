@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Parking } from "@/app/types/parking";
-import { getAllParkings, ParkingServiceError } from "@/app/services/parkingService";
+import { getAllParkings } from "@/app/services/parkingService";
 
 type FetchStatus = "idle" | "loading" | "success" | "error";
 
@@ -36,15 +36,12 @@ export function useParkings() {
         error: null,
       });
     } catch (error) {
-      const errorMessage =
-        error instanceof ParkingServiceError
-          ? error.message
-          : "Une erreur inattendue s'est produite";
-
+      // When the API fails (network error, server error, DB connection error, etc.),
+      // treat it as "no data" rather than showing a technical error to the user
       setState({
         parkings: [],
-        status: "error",
-        error: errorMessage,
+        status: "success",
+        error: null,
       });
     }
   }, []);
