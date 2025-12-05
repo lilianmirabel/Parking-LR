@@ -24,41 +24,45 @@ public class Parking {
     private double coordY;
 
     @Column(name = "nb_places")
-    private int nbPlaces;
+    private Integer nbPlaces;
+
+    @Column(name = "nb_places_disponibles")
+    private Integer nbPlacesDisponibles;
 
     @Column(name = "nb_pr")
-    private int nbPr;
+    private Integer nbPr;
 
     @Column(name = "nb_pmr")
-    private int nbPmr;
+    private Integer nbPmr;
 
     @Column(name = "nb_voitures_electriques")
-    private int nbVoituresElectriques;
+    private Integer nbVoituresElectriques;
 
     @Column(name = "nb_velo")
-    private int nbVelo;
+    private Integer nbVelo;
 
     @Column(name = "nb_2r_el")
-    private int nb2rEl;
+    private Integer nb2rEl;
 
     @Column(name = "nb_autopartage")
-    private int nbAutopartage;
+    private Integer nbAutopartage;
 
     @Column(name = "nb_2_rm")
-    private int nb2Rm;
+    private Integer nb2Rm;
 
     public Parking() {
     }
 
     public Parking(String nom, double ylat, double xlong, double coordX, double coordY,
-                   int nbPlaces, int nbPr, int nbPmr, int nbVoituresElectriques,
-                   int nbVelo, int nb2rEl, int nbAutopartage, int nb2Rm) {
+                   Integer nbPlaces, Integer nbPlacesDisponibles, Integer nbPr, Integer nbPmr, Integer nbVoituresElectriques,
+                   Integer nbVelo, Integer nb2rEl, Integer nbAutopartage, Integer nb2Rm) {
         this.nom = nom;
         this.ylat = ylat;
         this.xlong = xlong;
         this.coordX = coordX;
         this.coordY = coordY;
         this.nbPlaces = nbPlaces;
+        this.nbPlacesDisponibles = nbPlacesDisponibles;
         this.nbPr = nbPr;
         this.nbPmr = nbPmr;
         this.nbVoituresElectriques = nbVoituresElectriques;
@@ -87,27 +91,30 @@ public class Parking {
     public double getCoordY() { return coordY; }
     public void setCoordY(double coordY) { this.coordY = coordY; }
 
-    public int getNbPlaces() { return nbPlaces; }
-    public void setNbPlaces(int nbPlaces) { this.nbPlaces = nbPlaces; }
+    public Integer getNbPlaces() { return nbPlaces; }
+    public void setNbPlaces(Integer nbPlaces) { this.nbPlaces = nbPlaces; }
 
-    public int getNbPr() { return nbPr; }
-    public void setNbPr(int nbPr) { this.nbPr = nbPr; }
+    public Integer getNbPlacesDisponibles() { return nbPlacesDisponibles; }
+    public void setNbPlacesDisponibles(Integer nbPlacesDisponibles) { this.nbPlacesDisponibles = nbPlacesDisponibles; }
 
-    public int getNbPmr() { return nbPmr; }
-    public void setNbPmr(int nbPmr) { this.nbPmr = nbPmr; }
+    public Integer getNbPr() { return nbPr; }
+    public void setNbPr(Integer nbPr) { this.nbPr = nbPr; }
 
-    public int getNbVoituresElectriques() { return nbVoituresElectriques; }
-    public void setNbVoituresElectriques(int nbVoituresElectriques) { this.nbVoituresElectriques = nbVoituresElectriques; }
+    public Integer getNbPmr() { return nbPmr; }
+    public void setNbPmr(Integer nbPmr) { this.nbPmr = nbPmr; }
 
-    public int getNbVelo() { return nbVelo; }
-    public void setNbVelo(int nbVelo) { this.nbVelo = nbVelo; }
+    public Integer getNbVoituresElectriques() { return nbVoituresElectriques; }
+    public void setNbVoituresElectriques(Integer nbVoituresElectriques) { this.nbVoituresElectriques = nbVoituresElectriques; }
 
-    public int getNb2rEl() { return nb2rEl; }
-    public void setNb2rEl(int nb2rEl) { this.nb2rEl = nb2rEl; }
+    public Integer getNbVelo() { return nbVelo; }
+    public void setNbVelo(Integer nbVelo) { this.nbVelo = nbVelo; }
 
-    public int getNbAutopartage() { return nbAutopartage; }
-    public void setNbAutopartage(int nbAutopartage) { this.nbAutopartage = nbAutopartage; }
+    public Integer getNb2rEl() { return nb2rEl; }
+    public void setNb2rEl(Integer nb2rEl) { this.nb2rEl = nb2rEl; }
 
-    public int getNb2Rm() { return nb2Rm; }
-    public void setNb2Rm(int nb2Rm) { this.nb2Rm = nb2Rm; }
+    public Integer getNbAutopartage() { return nbAutopartage; }
+    public void setNbAutopartage(Integer nbAutopartage) { this.nbAutopartage = nbAutopartage; }
+
+    public Integer getNb2Rm() { return nb2Rm; }
+    public void setNb2Rm(Integer nb2Rm) { this.nb2Rm = nb2Rm; }
 }

@@ -94,6 +94,7 @@ public class CsvController {
                     existing.setCoordX(parsedParking.getCoordX());
                     existing.setCoordY(parsedParking.getCoordY());
                     existing.setNbPlaces(parsedParking.getNbPlaces());
+                    existing.setNbPlacesDisponibles(parsedParking.getNbPlacesDisponibles());
                     existing.setNbPr(parsedParking.getNbPr());
                     existing.setNbPmr(parsedParking.getNbPmr());
                     existing.setNbVoituresElectriques(parsedParking.getNbVoituresElectriques());

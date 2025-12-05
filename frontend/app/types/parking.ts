@@ -5,14 +5,15 @@ export interface Parking {
   xlong: number;
   coordX: number;
   coordY: number;
-  nbPlaces: number;
-  nbPr: number;
-  nbPmr: number;
-  nbVoituresElectriques: number;
-  nbVelo: number;
-  nb2rEl: number;
-  nbAutopartage: number;
-  nb2Rm: number;
+  nbPlaces: number | null;
+  nbPlacesDisponibles: number | null;
+  nbPr: number | null;
+  nbPmr: number | null;
+  nbVoituresElectriques: number | null;
+  nbVelo: number | null;
+  nb2rEl: number | null;
+  nbAutopartage: number | null;
+  nb2Rm: number | null;
 }
 
 export interface ParkingListResponse {
